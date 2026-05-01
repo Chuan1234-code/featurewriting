@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ding Chuan — Sports Journalist</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Karla:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- LANDING -->
+<div id="landing">
+  <div class="landing-bg"></div>
+  <div class="landing-credit">Melbourne, 2017 &nbsp;·&nbsp; Photo by Chuan</div>
+  <div class="landing-content">
+    <div class="landing-name">Ding Chuan</div>
+    <div class="landing-title">Sports Journalist</div>
+    <button class="enter-btn" onclick="enterSite()">Enter</button>
+  </div>
+</div>
+
+<!-- SITE -->
+<div id="site">
+  <nav>
+    <a class="nav-logo" onclick="showPage('about')">Ding Chuan</a>
+    <ul class="nav-links">
+      <li><a onclick="showPage('about')" class="active" data-page="about">About</a></li>
+      <li><a onclick="showPage('portfolio')" data-page="portfolio">Portfolio</a></li>
+      <li><a onclick="showPage('contact')" data-page="contact">Contact</a></li>
+      <li><a onclick="goHome()">Home</a></li>
+    </ul>
+  </nav>
+
+  <!-- ABOUT -->
+  <div id="about" class="page active">
+    <div class="about-top">
+      <img class="about-photo" src="images/my_photo.jpg" alt="Ding Chuan">
+      <div class="about-text">
+        <h1>Ding Chuan</h1>
+        <div class="about-role">Sports Journalist</div>
+        <p class="about-bio">
+          Ding Chuan is a sports journalist with over ten years of experience covering major
+          events, with a focus on tennis. He has reported on the 2017 and 2021 National Games,
+          the 2023 Asian Games in Hangzhou, and the 2024 Paris Olympics, alongside tennis
+          events including the 2017 Australian Open, 2018 Wimbledon, and the 2018 and 2019
+          WTA Finals. He is currently pursuing a Master's degree in AIDM at Hong Kong Baptist
+          University, looking to combine his reporting background with new directions in
+          digital media.
+        </p>
+      </div>
+    </div>
+
+    <div class="about-work-title">Field Work</div>
+    <div class="work-grid">
+      <div class="work-item" onclick="openLightbox('images/work1.jpg', 'Wimbledon, 2018', 'Interviewing Hong Kong actress Sandra Ng on site at The Championships, Wimbledon.')">
+        <img src="images/work1.jpg" alt="Wimbledon 2018">
+        <div class="work-caption">Wimbledon, 2018</div>
+      </div>
+      <div class="work-item" onclick="openLightbox('images/work2.jpg', 'WTA Finals, Singapore 2018', 'On-site interview with former World No. 1 Caroline Wozniacki at the 2018 WTA Finals.')">
+        <img src="images/work2.jpg" alt="WTA Finals 2018">
+        <div class="work-caption">WTA Finals, Singapore 2018</div>
+      </div>
+      <div class="work-item" onclick="openLightbox('images/work3.jpg', 'WTA Finals, Shenzhen 2019', 'On-site interview with former World No. 1 Karolína Plíšková at the 2019 WTA Finals.')">
+        <img src="images/work3.jpg" alt="WTA Finals 2019">
+        <div class="work-caption">WTA Finals, Shenzhen 2019</div>
+      </div>
+      <div class="work-item" onclick="openLightbox('images/work4.jpg', 'Asian Games, Hangzhou 2023', 'Exclusive interview with Zheng Qinwen, gold medallist in women\'s singles tennis at the 2023 Hangzhou Asian Games.')">
+        <img src="images/work4.jpg" alt="Asian Games 2023">
+        <div class="work-caption">Asian Games, Hangzhou 2023</div>
+      </div>
+    </div>
+
+    <!-- Lightbox -->
+    <div id="lightbox" onclick="closeLightbox()">
+      <div class="lb-inner" onclick="event.stopPropagation()">
+        <button class="lb-close" onclick="closeLightbox()">&#x2715;</button>
+        <img id="lb-img" src="" alt="">
+        <div class="lb-info">
+          <div class="lb-title" id="lb-title"></div>
+          <div class="lb-desc" id="lb-desc"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PORTFOLIO -->
+  <div id="portfolio" class="page">
+    <div class="portfolio-header">
+      <h2 class="portfolio-heading">Portfolio</h2>
+      <p class="portfolio-intro">
+        A lead contributor to <em>Tennis World Magazine</em> and NetEase Sports.
+        Has written for <em>Harper's Bazaar</em> and <em>WSJ</em> China editions,
+        and contributed to Nike Tennis junior tournament promotions across mainland China.
+      </p>
+    </div>
+    <div class="articles-grid" id="articles-grid"></div>
+  </div>
+
+  <!-- ARTICLE DETAIL -->
+  <div id="article-detail">
+    <button class="back-btn" onclick="showPage('portfolio')">Back to Portfolio</button>
+    <div class="detail-outlet" id="d-outlet"></div>
+    <h1 class="detail-title" id="d-title"></h1>
+    <img class="detail-img" id="d-img" src="" alt="">
+    <p class="detail-body" id="d-body"></p>
+    <a class="read-link" id="d-link" href="#" target="_blank">Read Full Article</a>
+  </div>
+
+  <!-- CONTACT -->
+  <div id="contact" class="page">
+    <div class="contact-inner">
+      <div class="contact-left">
+        <h2>Get in Touch</h2>
+        <p class="contact-text">
+          Open to editorial commissions, media collaborations,<br>
+           PR projects, and product roles at tech companies.
+        </p>
+        <div class="contact-links">
+          <div class="contact-item">
+            <span class="contact-label">Email</span>
+            <a class="contact-value" href="mailto:25417649@life.hkbu.edu.hk">25417649@life.hkbu.edu.hk</a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end #site -->
+
+<script>
+// ── Article data — edit here to update your portfolio ──
+const articles = [
+    {
+        id: 1,
+        outlet: "Harper's Bazaar",
+        title: "Zheng Qinwen: Into The Spotlight",
+        desc: "WTA Newcomer of the Year Zheng Qinwen gives an exclusive interview at the US Open, sharing her feelings on sudden fame and future goals.",
+        body: "WTA Newcomer of the Year Zheng Qinwen gives an exclusive interview at the US Open, sharing her feelings on sudden fame and future goals.",
+        img: "images/article1.jpg",
+        link: "http://star.bazaar.com.cn/2022/0906/329594.shtml"
+    },
+    {
+        id: 2,
+        outlet: "NetEase Sports",
+        title: "The Story of Jeon Ji-hee",
+        desc: "Jeon Ji-hee, the top Korean women's table tennis player of Chinese origin, discusses her unexpected rise to fame during the Tokyo Olympics and her dreams in a foreign land.",
+        body: "Jeon Ji-hee, the top Korean women's table tennis player of Chinese origin, discusses her unexpected rise to fame during the Tokyo Olympics and her dreams in a foreign land.",
+        img: "images/article2.jpg",
+        link: "https://weibo.com/ttarticle/p/show?id=2309404830612493304250&mark_id=999_reallog_mark_ad%3A999%7CWeiboADNatural"
+    },
+    {
+        id: 3,
+        outlet: "WSJ. Magazine Chinese Edition",
+        title: "Chang Yi: A Sports Artist's Adventure Journey",
+        desc: "The brave game begins at Skydive Perris.",
+        body: "The brave game begins at Skydive Perris.",
+        img: "images/article3.jpg",
+        link: "https://baijiahao.baidu.com/s?id=1835034528021873764&wfr=spider&for=pc"
+    }
+];
+
+// Render article cards
+function renderArticles() {
+  const grid = document.getElementById('articles-grid');
+  grid.innerHTML = articles.map(a => `
+    <div class="article-card" onclick="openArticle(${a.id})">
+      <img class="article-card-img" src="${a.img}" alt="${a.title}">
+      <div class="article-card-body">
+        <div class="article-outlet">${a.outlet}</div>
+        <div class="article-title">${a.title}</div>
+        <div class="article-desc">${a.desc}</div>
+      </div>
+    </div>
+  `).join('');
+}
+renderArticles();
+
+// Open article detail page
+function openArticle(id) {
+  const a = articles.find(x => x.id === id);
+  document.getElementById('d-outlet').textContent = a.outlet;
+  document.getElementById('d-title').textContent = a.title;
+  document.getElementById('d-img').src = a.img;
+  document.getElementById('d-body').textContent = a.body;
+  document.getElementById('d-link').href = a.link;
+
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const detail = document.getElementById('article-detail');
+  detail.style.display = 'block';
+  detail.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// Navigate between pages
+function showPage(name) {
+  const detail = document.getElementById('article-detail');
+  detail.style.display = 'none';
+  detail.classList.remove('active');
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(name).classList.add('active');
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.classList.toggle('active', a.dataset.page === name);
+  });
+  window.scrollTo(0, 0);
+}
+
+// Lightbox
+function openLightbox(src, title, desc) {
+  document.getElementById('lb-img').src = src;
+  document.getElementById('lb-title').textContent = title;
+  document.getElementById('lb-desc').textContent = desc;
+  const lb = document.getElementById('lightbox');
+  lb.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('active');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+// Return to landing
+function goHome() {
+  document.getElementById('site').classList.remove('visible');
+  setTimeout(() => {
+    document.getElementById('landing').classList.remove('hidden');
+  }, 300);
+}
+
+// Enter site from landing
+function enterSite() {
+  document.getElementById('landing').classList.add('hidden');
+  setTimeout(() => {
+    document.getElementById('site').classList.add('visible');
+  }, 400);
+}
+</script>
+</body>
+</html>

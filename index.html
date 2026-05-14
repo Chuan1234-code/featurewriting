@@ -7,6 +7,66 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Karla:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <style>
+    /* 临时修复文章内段落间距和图片样式，不破坏原有设计 */
+    #article-detail .detail-rich-content {
+      line-height: 1.7;
+    }
+    #article-detail .detail-rich-content p {
+      margin-bottom: 1.2em;
+    }
+    #article-detail .detail-rich-content h3 {
+      margin: 1.5em 0 0.5em;
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 500;
+    }
+    #article-detail .detail-rich-content img {
+      max-width: 100%;
+      margin: 1.8em 0;
+      display: block;
+      border-radius: 4px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    #article-detail .detail-rich-content hr {
+      margin: 2.5em 0;
+      border: 0;
+      height: 1px;
+      background: #e0ddd5;
+    }
+    /* article2 images centered */
+    #article-detail .detail-rich-content img.img-center {
+      margin-left: auto;
+      margin-right: auto;
+    }
+    /* remove duplicate arrow from back button */
+    .back-btn::before { content: none; }
+    /* contact page vertical + horizontal centering */
+    #contact.active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 70vh;
+    }
+    #contact .contact-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      max-width: 480px;
+      width: 100%;
+    }
+    #contact .contact-left {
+      width: 100%;
+      text-align: center;
+    }
+    #contact .contact-links {
+      justify-content: center;
+    }
+    /* article detail title centered */
+    h1.detail-title {
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
 
@@ -100,12 +160,11 @@
 
   <!-- ARTICLE DETAIL -->
   <div id="article-detail">
-    <button class="back-btn" onclick="showPage('portfolio')">Back to Portfolio</button>
+    <button class="back-btn" onclick="showPage('portfolio')">← Back to Portfolio</button>
     <div class="detail-outlet" id="d-outlet"></div>
     <h1 class="detail-title" id="d-title"></h1>
-    <img class="detail-img" id="d-img" src="" alt="">
-    <p class="detail-body" id="d-body"></p>
-    <a class="read-link" id="d-link" href="#" target="_blank">Read Full Article</a>
+    <div class="detail-rich-content" id="d-rich-content"></div>
+    <a class="read-link" id="d-link" href="#" target="_blank">Read Original Article (External)</a>
   </div>
 
   <!-- CONTACT -->
@@ -122,52 +181,277 @@
             <span class="contact-label">Email</span>
             <a class="contact-value" href="mailto:25417649@life.hkbu.edu.hk">25417649@life.hkbu.edu.hk</a>
           </div>
-
         </div>
       </div>
     </div>
   </div>
-
-</div><!-- end #site -->
+</div>
 
 <script>
-// ── Article data — edit here to update your portfolio ──
-const articles = [
-    {
-        id: 1,
-        outlet: "Harper's Bazaar",
-        title: "Zheng Qinwen: Into The Spotlight",
-        desc: "WTA Newcomer of the Year Zheng Qinwen gives an exclusive interview at the US Open, sharing her feelings on sudden fame and future goals.",
-        body: "WTA Newcomer of the Year Zheng Qinwen gives an exclusive interview at the US Open, sharing her feelings on sudden fame and future goals.",
-        img: "images/article1.jpg",
-        link: "http://star.bazaar.com.cn/2022/0906/329594.shtml"
-    },
-    {
-        id: 2,
-        outlet: "NetEase Sports",
-        title: "The Story of Jeon Ji-hee",
-        desc: "Jeon Ji-hee, the top Korean women's table tennis player of Chinese origin, discusses her unexpected rise to fame during the Tokyo Olympics and her dreams in a foreign land.",
-        body: "Jeon Ji-hee, the top Korean women's table tennis player of Chinese origin, discusses her unexpected rise to fame during the Tokyo Olympics and her dreams in a foreign land.",
-        img: "images/article2.jpg",
-        link: "https://weibo.com/ttarticle/p/show?id=2309404830612493304250&mark_id=999_reallog_mark_ad%3A999%7CWeiboADNatural"
-    },
-    {
-        id: 3,
-        outlet: "WSJ. Magazine Chinese Edition",
-        title: "Chang Yi: A Sports Artist's Adventure Journey",
-        desc: "The brave game begins at Skydive Perris.",
-        body: "The brave game begins at Skydive Perris.",
-        img: "images/article3.jpg",
-        link: "https://www.toutiao.com/article/7245262162489688637/?&source=m_redirect&wid=1778618439449"
-    }
+// ========== 文章完整数据（含所有图片和完整文字，段间距已由CSS保证） ==========
+const articlesData = [
+  {
+    id: 1,
+    outlet: "Harper's Bazaar",
+    title: "Zheng Qinwen: Into The Spotlight",
+    desc: "WTA Newcomer of the Year Zheng Qinwen gives an exclusive interview at the US Open, sharing her feelings on sudden fame and future goals.",
+    link: "http://star.bazaar.com.cn/2022/0906/329594.shtml",
+    fullHtml: `
+      <p><strong>被看见的郑钦文</strong></p>
+      <img src="images/article1_photo1.jpg" alt="article1_photo1">
+      <p>4-6、6-7，比赛结束。郑钦文的首次成人组美网之旅在第三轮终止。战胜她的球员是今年上升势头同样凶猛的温网女单八强选手尼迈尔。</p>
+      <p>正如郑钦文和我们之前聊到的那样，职业赛场风云变幻，一切都有可能发生。特别是遇到一个旗鼓相当的对手，决定比赛胜负的往往就是关键的一两分。</p>
+      <p>更重要的是，请不要忘了，这个19岁女孩的职业生涯才刚起步。如果你曾经深深震撼于郑钦文在罗兰·加洛斯的表现，那么也请和她一起坦然地面对这一点点挫折。</p>
+      <p>美网之旅结束了，属于郑钦文的新篇章才刚刚开始。</p>
+      <p>2022年的美国网球公开赛在比利·简·金国家网球中心拉开帷幕。作为本赛季的最后一项大满贯赛事，19岁的中国姑娘郑钦文将在这里展现她为大场面而生的风采。</p>
+      <p>我们于签表揭晓前与她进行了一次联线。屏幕的另一端，结束训练后的她看不出丝毫疲惫，长发披在肩上，语调平缓，在卧室柔和灯光的映衬下，眼神坚毅而自信。</p>
+      <p>本赛季与众多高排位选手相继过招让郑钦文的名字被越多越多的同行知晓，我们聊了聊她作为巡回赛"一年级生"的体验。她说年轻人就该在外面的世界闯一闯，但同时也很想念远在国内的家人和朋友。</p>
+      <h3>#1</h3>
+      <p>七月的温布尔顿网球锦标赛结束后，郑钦文退出了一站红土赛事并返回位于佛罗里达的IMG学院重新打磨技术。今年，郑钦文先后在法网和温网打进16强和32强，终结她大满贯之旅的人分别是最终夺冠的斯瓦泰克和莱巴金娜。尽管输掉了比赛，这个中国女孩身上所蕴藏的巨大潜力依旧让人们惊叹，以至于有球迷戏称她为"名誉亚军"。然而郑钦文无法满足于"惜败"，她需要胜利。</p>
+      <p>"对我来说一站比赛只有得到了冠军，我才可以真正地放松下来，我不会因为取得一些成绩就特别开心雀跃。"</p>
+      <p>2022赛季是郑钦文第一次完整地征战WTA巡回赛，对她来说，这是一个全新的战场。长期驻扎在巴塞罗那训练的郑钦文与许多职业网坛的顶尖高手有过近距离的接触，她清楚，想要攀上金字塔的最顶层，需要的是极度自律，甚至包括严格执行饮食计划等等。</p>
+      <p>郑钦文的现任教练佩雷·里巴来自西班牙，曾经位列男子单打世界排名第65位，深谙职业赛的游戏规则。两人携手之前，郑钦文师从过多位名教并一路接受了不同地域网球文化的洗礼，从湖北到北京、美国直至后来的巴塞罗那，见过了大世面的郑钦文在和里巴的磨合中却依旧偶有摩擦出现。尽管有分歧，但她仍努力地在与团队成员的相处中找到平衡点，特别是当她意识到不少成名已久的外国选手也面临着相似的难题时，自己的心态就平和了许多。"一开始确实很难处理好，但后面的合作就越来越默契。"郑钦文说。</p>
+      <p>这种平衡也体现在她与父母的相处上。伴随着专业团队接管女儿的日常事务，曾经引领着郑钦文走上网球道路的爸爸妈妈逐渐转向了幕后。</p>
+      <img src="images/article1_photo2.jpg" alt="article1_photo2">
+      <p>从小一路升级打怪，一步步进阶为目前世界排名第40位的球手，郑钦文一直都是同龄人中的佼佼者，这也给了她在大场面里与明星球员抗衡的底气。年初，她曾经和两届大满贯得主哈勒普有过一次交锋，虽然未能取胜，但郑钦文的击球给对方留下了深刻的印象，"就像炮弹一样飞过来"，罗马尼亚人说。</p>
+      <p>和顶尖球员在大赛上正面交锋并不容易，一不留神就会被对手的气场所吞噬。郑钦文的湖北老乡李娜就曾经在2005年的澳大利亚网球公开赛中完败于当年如日中天的莎拉波娃，李娜后来回忆道，她说自己当时走进罗德·拉沃尔球场时一度紧张到动作变形。</p>
+      <p>相比之下，初出茅庐的郑钦文似乎从未流露出胆怯。"我一直期待能够跟顶尖球员交手，现在终于等来了机会。因为我太激动了，所以有一些操之过急，我内心里一直都清楚，自己的技术并不比她们差。"</p>
+      <p>年初的澳洲之旅让郑钦文意识到，她是有机会的，但过高的期待同样会导致心态失衡。为了找到解决之道，她通过大量翻阅心理学书籍去寻找合适的方法。"书有这么高。"她边说边比划着。阅读的习惯保持至今，在此期间，她凭借在巴黎和温布尔顿的出色表现让世界认识了自己。</p>
+      <h3>#2</h3>
+      <p>随着排名逐步攀升，郑钦文的名字被愈发频繁地提及。在巴黎，她强烈地感受到自己正在"被看见"。法网女单16进8比赛开始前，世界排名第一的斯瓦泰克主动向她打了招呼，郑钦文清楚地记得，两人上一回在球员休息室相遇并没有任何互动。</p>
+      <p>她不再是"小透明"。曾经空缺肖像的WTA官网球员主页也悄然出现了一张全新的照片，画面里的郑钦文嘴角微微一翘，露出了大方的笑容。</p>
+      <p>法网新闻发布会上，止步16强的郑钦文提及生理期影响了她的发挥。"疼痛一直都在，随着比赛的进行痛感愈发剧烈。"她说。一番颇为实诚的发言着实震惊了不少西方媒体。</p>
+      <p>18届大满贯冠军克里斯·埃佛特在社交网络上向勇敢的郑钦文表达了敬意，埃佛特透露年轻时因为遭遇生理期输过几场重要的比赛，"我不想为自己曾经的失利找借口，我只是希望能早一点说出来。"埃佛特写道。</p>
+      <p>"当你什么都没有的时候，表达的想法没有人会在乎，但是当你越来越成功，你所说的话所想的东西，会被被更多人知道，这是一件非常值得欣慰的事情。"郑钦文说。</p>
+      <p>13岁时，从国内青少年赛事中脱颖而出的郑钦文得到了耐克的垂青。作为一个与中国网球有过深度合作的国际知名体育品牌，耐克曾经为无数青少年选手提供过支持。李娜也因为有了耐克的帮助，才在15岁的时候得到了第一次出国交流的机会。</p>
+      <p>身为中国网球标杆式的人物，李娜走出国门，遇见了一个更为广阔的世界，在完成了蜕变后，也让世界看到了一个打破常规的东方女性形象。</p>
+      <p>在李娜淡出职业网坛多年后，"娜式幽默"以及类似的气场似乎在同样来自湖北的郑钦文身上得到了继承。郑钦文告诉我们，她从不抗拒采访，说的都是"心里真正想说的话"。赛后新闻发布会上，她习惯仔细地分析自己晋级的前景，并与其他球员作比较。</p>
+      <img src="images/article1_photo3.jpg" alt="article1_photo3">
+      <p>坦诚的郑钦文金句频出，在发布会上留下了许多"女王"式的发言："我觉得我把温网冠军拱手让给了莱巴金娜"、"如果不夺冠我就会很伤心"、"我不在乎排名，我的哲学就是对手是谁都没有关系"......"queenwen（女王文）"的昵称不胫而走。</p>
+      <p>2016年，郑钦文曾前往法国参加Les Petits青少年赛。输掉八强战的她离开赛场前，在摄影师的请求下回到了场地中央，她高高举起了印有自己姓名和五星红旗的铭牌，现场的观众立刻报以热烈的掌声。在这个颇有意味的瞬间里，她似乎在向世界宣告"我来了"。6年之后，郑钦文终于被更多的人"看见"，她也加倍珍惜来之不易的机会。</p>
+      <p>在2022美网公开赛第二轮比赛中，郑钦文再次战胜对手，顺利闯入32强。赛后新闻发布会上，她聊起和芭莎合作的这组大片。"我享受这次拍摄的过程，喜欢看到赛场外不一样的自己，发现我的另一种美，不同于运动的美。"</p>
+      <h3>#3</h3>
+      <p>某种程度上，郑钦文代表了新世代中国运动员的群像，他们自信、视野开阔且不失谦逊。外形青春健美的她所展现出的气质似乎也与WTA十多年前推出的标语——"strong is beautiful"暗自契合。</p>
+      <p>如果说当年的李娜向我们展示了"Just do it"的精神内涵，那么如今的郑钦文则生动诠释了"决不停"的要义。在社交主页上，郑钦文写下了三行简短的中文：未来无法预测，过去不可改变，当下正好追梦。</p>
+      <img src="images/article1_photo4.jpg" alt="article1_photo4">
+      <p>而梦想所赋予的力量是强大的。在这种力量的支撑下，才有了郑钦文在罗兰·加洛斯的中央球场上演落后、追平、领先、受伤、缠绷带、拆绷带直至继续战斗等一系列震撼的戏码。</p>
+      <p>在2019年接受耐克评估、商谈续约事宜时，郑钦文还不是战绩最拔尖的新生代球员，然而她靠着自己的坚韧成功实现了"弯道超车"并成为当下中国女网最具代表性的面孔。</p>
+      <p>我们问郑钦文，是否享受时刻都在旅行的节奏，她给予了肯定的回复，但也坦言，现阶段自己的生活都围绕着比赛，她不想停下，没有太多的心思去饱览各地的风土人情，反而更憧憬回国见见朋友。</p>
+      <p>"大家都很不容易，已经在国外'流浪'了快一年，我也非常想念在湖北的家人。"郑钦文说。</p>
+      <p>进入北美硬地赛季，郑钦文在多伦多遇到了一大批中国球迷，同胞的呐喊声让她深受鼓舞，最终挺进了八强还创造了个人在WTA1000级别赛事中的最佳战绩。与此同时，她距离年初定下的目标——跻身Top30，越来越近。</p>
+      <p>在即将撞线的那一刻，郑钦文并没有流露出太多的兴奋，只是淡淡地表示，她把目标提得更高了。由于未能在多伦多站晋级四强，郑钦文错失了角逐下一站高级别赛事的资格并因此低落了许久。美网前哨战结束，她为自己的表现打了不及格。</p>
+      <p>近些年，女子网坛呈现出了百花齐放的局面，来自加拿大的安德莱斯库以及拥有一半中国血统的拉杜卡努两位"00后"球员都在美网夺得了生涯首个大满贯奖杯。人人都有机会的背景下，外界自然对蹿升势头凶猛的郑钦文给予了关注。</p>
+      <img src="images/article1_photo5.jpg" alt="article1_photo5">
+      <p>"我在大满贯最好的成绩目前是16强，我希望可以取得突破。"郑钦文告诉我们。</p>
+      <p>竞技体育的一部分魅力来自于未知，在对纽约之行以及今后满怀期待的同时，她也保持着谨慎。"你永远不知道会发生什么，网球比赛就是这样，我也可能第一轮、第二轮就怎么样，什么都有可能发生。"她说。</p>
+      <p>法国网球公开赛组委会曾经为郑钦文写下这样一段文字："只要永远满怀希望，未来就一定能闪闪发光，大胆地往前走吧，光在前面，而我们永远在你后面。路还很长，你的未来定将如星辰大海般璀璨。"</p>
+      <p>过去两三个赛季，郑钦文打出了不少漂亮的球，也输过看似不该输的比赛。成为了职业选手以后，她日渐领悟到，对抗的终极奥义不仅是和对手比拼也要和自己竞争，这是她从心理学课本里得到的最大收获。</p>
+      <hr>
+      <h3>English Version</h3>
+      <p><strong>Zheng Qinwen: Into the Spotlight</strong></p>
+      <p>4-6, 6-7. Match over. Zheng Qinwen's first main-draw US Open campaign ended in the third round at the hands of Jule Niemeier, also a fast-rising force who had reached the Wimbledon quarterfinals that year.</p>
+      <p>As Zheng had told us before, the professional tour is full of twists. When two evenly matched players meet, the outcome often hinges on just a point or two.</p>
+      <p>More importantly, do not forget that this 19-year-old's career is just beginning. If you were awed by her performance at Roland Garros, then you should also face this small setback with her, calmly.</p>
+      <p>The US Open trip is over, but a new chapter for Zheng Qinwen has just started.</p>
+      <p>At the Billie Jean King National Tennis Center, the last Grand Slam of the season was underway. Zheng was ready to show she was born for the big stage. Before the draw was released, we had a video call with her. She showed no signs of fatigue, her long hair draped over her shoulders, speaking softly but with determined, confident eyes.</p>
+      <p>After trading blows with many top-ranked players this season, Zheng's name became known to more and more peers. We talked about her experience as a first-year player on tour. She said young people should explore the world, but she also missed her family and friends back home.</p>
+      <p><strong>#1</strong></p>
+      <p>After Wimbledon, Zheng skipped a clay tournament and returned to the IMG Academy in Florida to refine her game. She had made the fourth round at the French Open and the third round at Wimbledon, falling to eventual champions Iga Świątek and Elena Rybakina. Though she lost, the enormous potential she displayed amazed fans, some even joking she was a "honorary runner-up." But Zheng was not satisfied with close losses; she wanted victories.</p>
+      <p>"For me, I can only truly relax if I win the tournament. I won't be overly happy just because I've achieved some results," she said.</p>
+      <p>The 2022 season was Zheng's first full year on the WTA Tour. Training long‑term in Barcelona, she had witnessed firsthand the extreme discipline required to reach the top, including strict diet plans.</p>
+      <p>Her coach at the time, Pere Riba from Spain, a former world No. 65, knew the professional game well. Despite occasional friction with Riba, Zheng tried to find balance with her team, especially after realizing that even many established foreign players faced similar challenges. "It was difficult at first, but we became more and more in sync," she said.</p>
+      <p>That balance also extended to her relationship with her parents, who gradually stepped back as a professional team took over daily matters.</p>
+      <p>Zheng had been a standout among her peers since childhood, which gave her the confidence to compete with star players on big stages. Early in the year, she faced two‑time Grand Slam champion Simona Halep. Though she lost, Halep later described Zheng's shots as "flying like cannonballs."</p>
+      <p>Facing top players head‑on at major tournaments is not easy; one can easily be overwhelmed by their aura. Her Hubei compatriot Li Na once recalled being so nervous in a 2005 Australian Open match against Maria Sharapova that her movements became distorted. In contrast, the fledgling Zheng never seemed to show fear. "I've always looked forward to playing against top players, and now the chance has finally come. I was too excited, so I rushed a bit, but deep down I've always known that my skills are not inferior to theirs," she said.</p>
+      <p>The Australian swing made her realize she had a chance, but too high expectations could also unbalance her. To find a solution, she turned to psychology books. "This tall," she said, gesturing. She has kept up the reading habit, and in the meantime, her outstanding performances in Paris and Wimbledon made the world take notice.</p>
+      <p><strong>#2</strong></p>
+      <p>As her ranking climbed, Zheng's name was mentioned more frequently. In Paris, she felt strongly that she was "being seen." Before her fourth‑round match, world No. 1 Iga Świątek greeted her proactively—Zheng remembered they had no interaction the last time they met in the players' lounge. She was no longer invisible. A new photo even appeared on her previously empty WTA player profile, showing a confident smile.</p>
+      <p>At her French Open press conference, Zheng candidly mentioned that her menstrual period had affected her performance. "The pain was constant and intensified as the match went on," she said. Her honesty stunned many Western media outlets. Eighteen‑time Grand Slam champion Chris Evert paid tribute to Zheng on social media, revealing that she herself had lost important matches due to her period when she was young. "I don't want to make excuses for my losses, but I just wish I could have spoken out earlier," Evert wrote.</p>
+      <p>"When you have nothing, nobody cares about your thoughts. But when you become more successful, what you say and think gets known by more people. That is something truly gratifying," Zheng said.</p>
+      <p>At 13, Zheng caught the attention of Nike, which had supported countless junior players and had a deep relationship with Chinese tennis. Li Na also received Nike's help, which allowed her to go abroad at 15. Zheng carries on that spirit. She told us she never shies away from interviews and always says what is truly on her mind.</p>
+      <p>Zheng's candid remarks produced many "queen‑like" quotes: "I feel like I gave the Wimbledon title away to Rybakina," "If I don't win the championship, I'll be very sad," "I don't care about rankings; my philosophy is that it doesn't matter who the opponent is..." The nickname "Queenwen" spread quickly.</p>
+      <p>In 2016, Zheng took part in the Les Petits tournament in France. After losing in the quarterfinals, she was asked by a photographer to return to the center court, where she held up a placard bearing her name and the Chinese flag. Six years later, Zheng Qinwen is finally being seen by many more, and she cherishes that hard‑won opportunity.</p>
+      <p><strong>#3</strong></p>
+      <p>Zheng Qinwen represents a new generation of Chinese athletes—confident, broad‑minded, and modest. Her athletic, healthy appearance aligns with the WTA's decade‑old slogan "strong is beautiful." If Li Na showed us the spirit of "Just do it," then Zheng Qinwen vividly interprets "never done." On her social media page, she wrote three short lines: The future is unpredictable, the past cannot be changed, the present is just right for chasing dreams.</p>
+      <p>The power of dreams is strong. Supported by that power, Zheng staged an epic comeback on the center court at Roland Garros—falling behind, leveling, taking the lead, getting injured, having her leg taped and then the tape removed, and continuing to fight.</p>
+      <p>When she was evaluated by Nike for renewal in 2019, Zheng was not the most outstanding junior, but her resilience allowed her to overtake her peers and become the most representative face of Chinese women's tennis today.</p>
+      <p>We asked Zheng if she enjoyed the constant travel. She said yes, but admitted that her life currently revolves around competition. She didn't want to stop and longed more to go home and see her friends. "It's been hard for everyone, wandering abroad for nearly a year. I really miss my family in Hubei," she said.</p>
+      <p>Entering the North American hard‑court season, Zheng met a large group of Chinese fans in Toronto. Their cheers inspired her to reach the quarterfinals, her best result at a WTA 1000 event. She was getting closer to her goal of breaking into the Top 30. But when she was about to cross that line, she showed little excitement, simply saying she had set the bar higher. After failing to reach the semifinals in Toronto, she lost a chance to compete in the next high‑level tournament and felt down for a long time. She gave herself a failing grade for the US Open buildup.</p>
+      <p>"My best Grand Slam result so far is the fourth round. I hope to break through," Zheng told us.</p>
+      <p>Competitive sport derives part of its appeal from the unknown. Eager about New York and the future, Zheng remained cautious. "You never know what will happen. That's tennis — I might lose in the first or second round. Anything is possible," she said.</p>
+      <p>The French Open organizers once wrote for her: "As long as you always hold onto hope, the future will surely shine brightly. Move forward boldly — the light is ahead, and we will always be behind you. The road is still long, and your future will surely be as vast and brilliant as the stars and the sea."</p>
+      <p>Over the past two or three seasons, Zheng has struck many beautiful shots and lost matches she perhaps should not have. Since turning professional, she has come to understand that the ultimate art of competition is not just about defeating opponents, but also about competing against oneself — the greatest lesson she has drawn from all those psychology books.</p>
+    `
+  },
+  {
+    id: 2,
+    outlet: "NetEase Sports",
+    title: "The Story of Jeon Ji-hee",
+    desc: "Jeon Ji-hee, the top Korean women's table tennis player of Chinese origin, discusses her unexpected rise to fame during the Tokyo Olympics and her dreams in a foreign land.",
+    link: "https://weibo.com/ttarticle/p/show?id=2309404830612493304250",
+    fullHtml: `
+      <p><strong>韩国医美科技+中国乒乓狠活助她走红东京</strong></p>
+      <p>紫色的射灯在不规则旋转，塔石体育馆里充斥着呐喊声，这是10月22日WTT澳门站女单四分之一决赛的现场。导播将画面切到场边的教练席，韩国队员田志希正在给法国名将袁佳楠做战术指导："你别想一两下就干死她（石川佳纯），因为你现在没有绝对机会，你得有点耐心。"</p>
+      <p>在乒乓球世界里，汉语等于官方语言。除了所向披靡的中国国家队，海外华裔军团也是不容小觑的力量。</p>
+      <p>田志希便是其中的一员，这位生于河北廊坊的姑娘经常出现在世界排名10名左右的位置，奥运会女单项目个人最好成绩是八强。在中国女选手常年垄断的赛事中，田志希的成绩并不够亮眼，但东京奥运会时她却意外走红网络。</p>
+      <p>成都世乒赛期间，我们和田志希聊了聊，她讲述了成为"美妆博主"的感受，异国他乡的生活和职业生涯的起伏。</p>
+      <img class="img-center" src="images/article2_photo1.jpg" alt="article2_photo1">
+      <h3>#1</h3>
+      <p>2021年7月28日，东京奥运会乒乓球项目进入女单四分之一决赛阶段争夺，主场作战的伊藤美诚对阵韩国"一姐"田志希。志在必得的3号种子伊藤除了在第三局小遇挑战以外，始终占据着场上的主动，她以11-5、11-1、12-10、11-6淘汰了位列7号种子的对手。</p>
+      <p>比赛结束后，田志希的国籍与外形引发了人们的热议。</p>
+      <p>"在四分之一决赛被伊藤美诚淘汰的韩国选手田志希，原本是中国选手，在2011年加入韩国国籍。她最神奇的，不是换了国籍，而是换了头......"一位关注人数近千万的时尚博主上这样写道。</p>
+      <p>很快，各路网友们便涌入微博评论区，有人惊呼："满头大汗的，额头和鼻梁的高光（竟然）都不脱妆"！</p>
+      <p>和网络上流传着十年前的高糊图片做对比，出现在东京奥运赛场的田志希彷佛换了一个人，眼袋似乎消失了，脸上的皮肤也更加紧致且有光泽。</p>
+      <p>最终，一个并不太友好的话题——"田志希整容前后对比"以惊人的2.5亿曝光量登上了热搜。在乒坛打拼多年的田志希就这样莫名地红了。不少人直接朝她喊话，"跪求"变美的秘诀。</p>
+      <p>"奥运会我跟伊藤那场球让很多人看到了我，当时有些不好的评价，但我没有想太多。"</p>
+      <p>田志希其实早在2016年里约奥运会结束之后就做了双眼皮手术，时隔多年，面对自己突然爆红的事实，她显得很平静。</p>
+      <p>田志希亲自"下场"转发了微博，愉快地与网友们互动。被疯传的"换头术"当然并不存在，形象上的改观得益于适度医美和坚持不懈的细心护理：打水光针、买美容仪、纹发际线......她都毫无保留地把"秘方"分享给大家，甚至在个人社交主页上直接添加了"美妆博主"的标签。一番坦诚的操作着实让网友们又惊又喜。</p>
+      <img class="img-center" src="images/article2_photo2.jpg" alt="article2_photo2">
+      <p>田志希并不太在意外界的评价，毕竟"变美"只是调剂生活的佐料而已，她清楚自己还是一名乒乓球手。已经挺进了奥运会女单八强的轮次，田志希当然渴望再进一步。"那个时候，你能看到领奖台，但是又上不去，其实挺纠结的。"</p>
+      <p>十多年前，她也纠结过。</p>
+      <h3>#2</h3>
+      <p>从7岁开始练习乒乓的田志希曾加盟鲁能俱乐部。多年之后，当她明白自己无法入围国乒便开始寻找新的出路。</p>
+      <p>"说的简单一点，出去的人都是被淘汰的！不是说我们没有机会打主力，而是没有机会进国家队。女队那仨人（陈梦、王曼昱、孙颖莎）去打男子比赛都能冲一下奖牌，那个球的质量实在太高了。"专业特长是许多体制内运动员唯一的谋生手段。对于田志希来说，接近20岁临时转行不现实，她清楚只有乒乓球能体现自己的价值。那个时候，她萌生了去欧洲打联赛的想法，可由于年纪太小需要监护人参与且流程繁琐而不得不作罢。</p>
+      <p>"后来我爸爸的一个朋友说，韩国那边在找球员，问我去不去？我没有太多的心理建设，当时想有一个平台就走吧。"</p>
+      <p>于是在2010年，18岁的田志希飞往韩国首尔，开启了海外之旅。人生地不熟，语言也不通，刚来韩国的她一度很挣扎。</p>
+      <p>田志希清楚地记得抵达首尔第一天的场景："那天我大概晚上6点到了宿舍，不会弄吃的，也不知道什么该做什么不该做，当时智能手机也没那么普及，生活其实很不方便。出门也看不懂韩文，坐车就得自己数着站，然后我回来的时候也这样。我们队里的监督开会，我也想努力听，但根本听不懂。"</p>
+      <p>那是一种很憋屈、无助的感受。刚到国外的日子，她觉得孤独，最艰难的莫过于要克服生活中处处弥漫的无根和漂泊。除此之外，韩国的乒乓球界同样存在着竞争。离开了国乒的体系并不意味着田志希可以轻易地在海外取胜。</p>
+      <img class="img-center" src="images/article2_photo3.jpg" alt="article2_photo3">
+      <p>没有回头路可以走，她努力地适应着新生活，尽管始终不理解为什么队友习惯上午一起床就吃冰淇淋、啃薯条，田志希尝试着拥抱韩国文化，靠着追韩剧锻炼口语。赛场上，她的水平也逐步提升，得到了俱乐部教练的赏识，后来又入选了韩国国家队，并在2014年仁川亚运会上拿到了一枚宝贵的混双铜牌。</p>
+      <h3>#3</h3>
+      <p>来到成都的田志希状态并不好。在欧洲拉练时，她伤了膝盖，此后便一直处于休养状态。世乒赛之前，田志希有足足一个月没碰球板，她也不在韩国女队最初的备战计划中。然而考虑到韩国女队的其他成员几乎没有大赛经验，韩国队主教练还是找到了田志希，恳请她上场。</p>
+      <p>"他是有多憋得慌，才跟我这么说。"她调侃道。田志希很为难，但又"盛情难却"答应了教练的请求。小组赛阶段，田志希在韩国对阵匈牙利的比赛中登场，她以1-3输给了年长自己近30岁的倪夏莲，完成了本届世乒赛的唯一一次亮相。</p>
+      <p>"我们是带着团体种子来的，我第一场没有承担起应该承担的责任，后来团队就越来越困难。没有能尽到自己的这份力量，我也挺难过的。"勉强从小组出线后，韩国队在第二阶段以0-3被伊藤美诚领衔的日本队横扫出局。</p>
+      <p>运动员无法回避失利。去年底的休斯顿世乒赛，田志希注意到一位高排位选手在输球后就低沉了许多天。她也体会过那种幽深的痛苦，尽管在与我们的交流中，田志希始终强调自己的感受与顶级球员们不是一个量级。</p>
+      <p>"我刚到韩国的时候，觉得能上场就行。但人的欲望是填不饱的，2016年，我第一次参加奥运会，站在奥运的舞台上就想着要走更远。我觉得遗憾的是，我没有拿到奥运会的奖牌。我两届奥运会团体都没有进前四，我尽力了，真的。我当时团体一场球没输，也是没办法。"</p>
+      <p>要想夺牌，就必须凭实力说话。球手的成长与整个梯队的培养体系息息相关，田志希认为，中国队长盛不衰的秘诀之一就在于队伍上下把准备工作做到了极致。"如果一支队伍能为困难准备投入100分的精力，那中国队可以投入200分甚至300，演练出所有可能发生的场景。"她说。</p>
+      <p>另一方面，近些年随着日本队的崛起，留给别国选手突围的空间则被进一步压缩。</p>
+      <p>上周五，田志希迎来了自己的30岁生日。来到而立之年的她似乎又一次站在了十字路口，是继续拼下去还是见好就收，她无法立刻给出答案。</p>
+      <p>最近一段日子，田志希迷上了脱口秀，她说最打动自己的是那些令人捧腹的段子基本都源自表演者的真实人生体验。"当一个人可以用喜剧去呈现自己曾经的痛苦，那他其实也就看开了、成长了。"</p>
+      <img class="img-center" src="images/article2_photo4.jpg" alt="article2_photo4">
+      <p>前几天，田志希在社交平台写下了一段话：人生，就三万多天。开开心心的，比啥都强。在几个月的纠结和这么久的挫折中我学会和自己和解。和自己更好的相处，我眼里和心里的世界就变的豁达了很多。</p>
+      <p>至于未来的事情，就留给未来再解答吧。</p>
+      <hr>
+      <h3>English Version</h3>
+      <p><strong>The Story of Jeon Ji-hee</strong></p>
+      <p>Purple spotlights rotated irregularly, the Tap Seac Multisport Pavilion filled with shouts. It was the WTT Macao women's singles quarterfinal on October 22. The broadcast cut to the courtside coach's seat, where Korean player Jeon Ji-hee was giving tactical advice to French star Yuan Jianan: "Don't try to kill her (Kasumi Ishikawa) in one or two shots, because you don't have a sure chance right now. Be patient."</p>
+      <p>In the table tennis world, Chinese is practically the official language. Apart from the invincible Chinese national team, the overseas Chinese‑born contingent is also a force to be reckoned with.</p>
+      <p>Jeon Ji‑hee is one of them. Born in Langfang, Hebei province, she often ranks around world No. 10, with a career best of quarterfinals in Olympic singles. Although her results are not outstanding in events long dominated by Chinese women, she unexpectedly went viral online during the Tokyo Olympics.</p>
+      <p>During the Chengdu World Team Championships, we talked with Jeon about her feelings as a "beauty blogger," life in a foreign country, and the ups and downs of her career.</p>
+      <h3>#1</h3>
+      <p>On July 28, 2021, in the Olympic women's singles quarterfinal, home favorite Mima Ito faced Korea's No. 1 Jeon Ji‑hee. Ito won 11‑5, 11‑1, 12‑10, 11‑6. After the match, Jeon's nationality and appearance sparked heated discussion.</p>
+      <p>A fashion blogger with nearly ten million followers wrote: "Jeon Ji‑hee, the Korean player eliminated by Ito Mima, was originally Chinese and acquired Korean nationality in 2011. The most amazing thing is not the change of nationality, but the change of her head..." Netizens exclaimed, "Sweating profusely but the highlighter on her forehead and nose didn't budge!"</p>
+      <p>Comparing with blurry photos from ten years ago, Jeon at the Tokyo Olympics looked like a different person—her eye bags seemed gone, and her skin was firmer and more radiant. The topic "Jeon Ji‑hee before‑after plastic surgery" trended with 250 million views.</p>
+      <p>Jeon herself joined the discussion, reposting and interacting cheerfully. She openly shared her skincare secrets, including skin boosters, beauty devices, and hairline tattoos, even adding the label "beauty blogger" to her social media profile. About her Olympic quarterfinal finish, she said, "At that moment, you can see the podium but can't get up there. It was quite agonizing."</p>
+      <h3>#2</h3>
+      <p>Jeon started playing at seven and once joined the Luneng club. Realizing she could not break into the Chinese national team, she looked for other paths. "To put it simply, those who go abroad are the ones who were eliminated! The three girls on the women's team (Chen Meng, Wang Manyu, Sun Yingsha) could even compete for medals in men's events." In 2010, 18‑year‑old Jeon flew to Seoul.</p>
+      <p>She vividly remembers the first day: "I arrived at the dorm around 6 p.m., didn't know how to cook, couldn't read Korean, had to count subway stops. During team meetings, I understood nothing." She improved her Korean by watching K‑dramas, eventually making the Korean national team and winning a mixed doubles bronze at the 2014 Incheon Asian Games.</p>
+      <h3>#3</h3>
+      <p>Jeon arrived in Chengdu in poor form. She had injured her knee during a training camp in Europe and had gone a full month without picking up a racket. She was not in the Korean women's team's original plans, but with almost every other squad member lacking big‑match experience, the head coach sought her out and asked her to play. "How desperate must he have been to say that to me," she joked. Unable to refuse, she agreed. In the group stage, facing Hungary, Jeon lost 1–3 to Ni Xialian, who is nearly 30 years her senior, in what turned out to be her only appearance at the championships. After barely advancing from the group stage, Korea was swept 0–3 by Japan in the next round. "I feel sad that I couldn't contribute my share," she said.</p>
+      <p>Athletes cannot avoid defeat. At the Houston World Championships late last year, Jeon noticed a high‑ranked player who was subdued for many days after losing. She has felt that kind of deep pain too, though she was quick to add that what she experiences is not on the same level as the sport's very top players. "When I first came to Korea, just being able to play felt like enough. But human desire is never satisfied. In 2016, when I stood on the Olympic stage for the first time, I wanted to go further. My biggest regret is that I never won an Olympic medal. Our team didn't make the top four in either of my two Olympics. I gave my all — truly. In the team event, I didn't lose a single match, but there was nothing I could do about it."</p>
+      <p>To win a medal, you have to earn it with ability. Player development is inseparable from the training system as a whole. Jeon believes one of the secrets behind China's sustained dominance is that everyone in the squad prepares to an extraordinary degree. "If another team puts in 100 percent of effort to prepare for any difficulty, the Chinese team puts in 200 or even 300 percent, rehearsing every scenario that could possibly arise," she said. Meanwhile, the rise of Japan's team in recent years has further narrowed the window for other nations to break through.</p>
+      <p>Last Friday, Jeon celebrated her 30th birthday. Standing at what feels like another crossroads — press on or call it a career — she cannot give an immediate answer. Lately she has become hooked on stand‑up comedy. What moves her most, she says, is that the funniest material almost always comes from the performer's real life. "When a person can present their past pain through comedy, it means they've made peace with it, and grown."</p>
+      <p>A few days ago, Jeon wrote on social media: "Life is only about 30,000 days. Being happy matters more than anything. Through months of confusion and a long stretch of setbacks, I've learned to reconcile with myself. Treating myself better, the world I see and feel has become far more open." As for what comes next, she'll leave that for the future to answer.</p>
+    `
+  },
+  {
+    id: 3,
+    outlet: "WSJ. Magazine Chinese Edition",
+    title: "Chang Yi: A Sports Artist's Adventure Journey",
+    desc: "The brave game begins at Skydive Perris.",
+    link: "https://www.toutiao.com/article/7245262162489688637/",
+    fullHtml: `
+      <p><strong>常艺：学习跳伞，就是学习跟恐惧做朋友</strong></p>
+      <img src="images/article3_photo1.jpg" alt="article3_photo1">
+      <p>在小红书上输入"跳伞"两个字，你能轻易地找到分布在全国各地的近30个跳伞基地，上至北京，下至海南。在国内，单次跳伞的花销基本在2000元至5000元之间，不同的价格所对应的配套服务也有所区别。</p>
+      <p>严格来说，跳伞并不是一项新兴的极限运动。早在中世纪，生活在西班牙科尔多瓦的摩尔人就曾利用改良后的超大斗篷尝试过一次不成功的高空跳跃。而陈列在大英图书馆的一份手稿则显示，人们在文艺复兴时期已经完成了最原始的跳伞装备设计。</p>
+      <p>20世纪以来，跳伞被广泛运用于军事领域，50年代起，它则逐渐成为了国际性体育竞赛项目，首届世锦赛于1951年在前南斯拉夫举行。我国很早就引入了跳伞，民间的组织还可追溯至40年代，中国航空运动协会跳伞委员会则在60年代成立。</p>
+      <p>随着时代的变迁，如今的跳伞亦被赋予了新的内涵，越来越多渴望挑战自我的普通人参与其中，常艺便是其中的一位。</p>
+      <h3>#1</h3>
+      <p>作为极限运动博主的常艺第一次接触跳伞是在2016年，当时正在新加坡南洋理工攻读市场营销硕士学位的他以交换生的身份来到美国斯坦福学习。在此之前，热衷于户外运动的常艺已经陆续掌握了攀岩、潜水和冲浪等技能。而在他最初的认知中，跳伞并不是作为一项"运动"而存在，他勇于挑战，除了年轻气盛，还因为想探寻内心深处恐惧的上限。</p>
+      <p>"我是一个恐高的人，站在十几楼往下看的话，腿是软的。但我想看看，自己能不能接受这一点。"</p>
+      <img src="images/article3_photo2.jpg" alt="article3_photo2">
+      <p>位于美国南加州的Skydive Perris是空军的训练基地，拥有全球最好的跳伞设施，常艺当时拎着行李直奔目的地，在完成6个小时的地面训练后就迎来了自己的首次跳跃。有些发烧友极其享受在高空中恣意飞翔的状态，但常艺坦言，当飞机升至4000米高空，自己踏出机舱的那一刻，内心是害怕的。"我必须得承认我很渺小，第一跳的时候我是没有思考的，当时完全不在状态，我的大脑是一片空白的。"</p>
+      <p>由于未能在空中及时对教练发出的指令做出回应，常艺的第一跳失败了。首跳带给他的除了些许沮丧，还有强烈的胃肠道反应。回到地面，常艺休息了半小时，这期间他不断地给自己心理暗示，教练也告诉他可以等到第二天再尝试。他不想等，稍作休整后便再度登机。"我不想让老美觉得'中国人就这样吗？'，我是有民族自豪感的，这是我当时真实的感受。"</p>
+      <img src="images/article3_photo3.jpg" alt="article3_photo3">
+      <p>跳伞员身上通常背着两个伞，主伞如果失灵，还有副伞。而万一副伞同样发挥不了作用，自动开伞器（AAD）在下降至一定高度时也能保证平安着陆。</p>
+      <p>常艺明白，自己是绝对安全的，他试着调整呼吸节奏，努力静下心来。第二跳的过程相对顺利，两跳过后他决定"隔日再战"。在跳伞基地提供的课程里，新手需要完成8次跳跃才能获得AFF结业证。从第9跳起，跳伞员在空中得到的指令愈加复杂，难度也逐级提升，只有顺利完成25跳的人才能获得USPA认可的A证。"每一跳教练都会加一个动作，比如让你检查高度表、做一个转身、无保护出舱躺着出去或者做一个转身外加上升......"</p>
+      <img src="images/article3_photo4.jpg" alt="article3_photo4">
+      <p>常艺最终顺利过关。从2016年在Skydive Perris尝试第一次跳跃起至今，前后7年，他总计完成了近230次跳跃，足迹遍布世界各地。在与我们的交流中，常艺说，尽管已经驾轻就熟，但每次跃出机舱后，他依然会恐惧，这种本能的反应是刻在DNA里的。对于一个人而言，源自于血液里的恐惧与一颗勇于挑战极限的内心是能共存的，勇敢的人也可以有胆怯的时候。于是，常艺选择和恐惧"做朋友"。</p>
+      <p>"恐惧是无处不在的，没有办法克服，你只有去面对它。接下来跳伞，我还是会恐惧，但我可以接受。"</p>
+      <h3>#2</h3>
+      <p>就在我们交谈的前几天，常艺刚刚经历了一次"生死时速"。他在川西牛背山拍摄时突发感冒，整个身体在高原反应的作用下又出现了浮肿的症状，一度情况危急，好在救护车及时出现才顺利脱险。"那个时候我是害怕的，但我也知道我是OK的。"他说。</p>
+      <p>探险以及与恐惧共存似乎成了一种美丽的诱惑，这让常艺在进入职场后对于未来有了新的思考。</p>
+      <p>留洋归来，常艺成为了一名白领，开始了朝九晚五的生活。他没有回山东老家"进体制"，而是选择扎根在杭州。在他看来，与北上深相比，杭州的生活节奏相对舒缓。少年时代，常艺从书本里读到了"欲把西湖比西子，淡妆浓抹总相宜"，便对这里的山山水水充满了好奇。杭州的一切基本满足了他对于美好生活的遐想，有足够的时间做饭、喝茶、散步，只坐半小时地铁就可以到户外攀岩。</p>
+      <p>但办公室终究还是困不住他。</p>
+      <p>多年户外运动的经历练就了他果敢、干练的处事风格，常艺在2018年辞去了工作，毅然加入到创业大军中。"从小我们就活在别人设计好的生活轨迹里，很多人都在'等'，我不想这样，如果20岁不出来创业，那我30岁根本就出不来。"</p>
+      <p>常年穿梭在中美两地，常艺结识了一帮极限运动爱好者，其中不乏冲浪高手以及参加过奥运会的退役运动员。他将朋友们凝聚在一起，搭建了一个类似MCN的平台并利用手头已有的资源，为他们介绍了诸多户外拍摄工作机会。自主创业，机遇与风险并存，常艺当然也遇到了瓶颈，期间他还曾尝试往户外体育旅游的模式发展，但在兜兜转转之后，他决定先专心维护好个人IP。</p>
+      <img src="images/article3_photo5.jpg" alt="article3_photo5">
+      <p>这几年，伴随着国内网红经济规模的不断壮大，以常艺为代表的极限运动KOL们在各自的赛道上纷纷闯出了名堂。粉丝们痴迷于常艺别样精彩的人生体验，而他也得到了不同品牌商们的关注。随着知名度渐长，常艺如今甚至有机会登上综艺节目向更多的人宣传跳伞。</p>
+      <p>"体育艺术家"是常艺对自己的定位。他说，身体和灵魂都得在路上。他会利用一切机会阅读，最近他醉心于《蒋勋说宋词》，被迁客骚人们的人生际遇所打动。另一方面，为了备战一项即将开始的铁人三项比赛，常艺还保持着高强度的训练节奏。</p>
+      <p>"我20岁到30岁这几年已经过得很漂亮了，我希望在35岁到来前，找到新的平衡。"他说。</p>
+      <img src="images/article3_photo6.jpg" alt="article3_photo6">
+      <p><strong>以下是《WSJ.》与常艺的对谈：</strong></p>
+      <p><strong>《WSJ.》：</strong>国内是在什么时候兴起这股跳伞热潮的？<br><strong>常艺 ：</strong>我是国内比较早接触到跳伞的人之一。印象中，国内在2017年前后出现了到美国、迪拜学习跳伞的热潮。</p>
+      <p><strong>《WSJ.》：</strong>国内有哪些跳伞社群呢？<br><strong>常艺 ：</strong>我知道在海南有不少，其他零零散散分布在江浙、北京、广东一带。这些基地都非常专业，经过了USPA（美国跳伞协会）认证。</p>
+      <p><strong>《WSJ.》：</strong>你最初在美国学习了跳伞，据你观察，美国的跳伞爱好者大多从事什么职业？<br><strong>常艺 ：</strong>在加州lakeside那一带形成了一个类似航空小镇的社区，10个人有9个会跳伞，还有1个会开飞机。厨师会跳伞，保洁人员也会跳伞。周边的居民也会来跳伞，比如大学生、建筑师、朝九晚五的上班族、五花八门，大家周末来这里跳伞、吃吃喝喝，跳伞类似于一种社区文化，就好像我们有乒乓球文化一样。</p>
+      <p><strong>《WSJ.》：</strong>那跳伞给予了你哪些启迪呢？<br><strong>常艺 ：</strong>我之前学到的一些人生哲理基本来自于父母家庭教育。初高中的时候，更多的是接受书本上的知识，而那些东西我认为不是自己人生的参悟。我17岁出国念书，父母不在身边，那个时候开始，我对事物的认知基本来自于我通过极限运动所获得的感悟。如果不是跳伞的话，我看待事物可能会是另一套评价体系。看过这个大千世界之后，水利万物而不争，你会更加去平和地待人接物。</p>
+      <img src="images/article3_photo7.jpg" alt="article3_photo7">
+      <p><strong>《WSJ.》：</strong>你有超过200次的跳伞经历，这其中有遇到特别让你触动的人或者事情吗？<br><strong>常艺 ：</strong>有。在跳伞基地，我遇见了一个叫做Craig的教练。他担任加拿大警察和美国海豹突击队的跳伞教练官，也是汤姆·克鲁斯在拍摄《碟中谍6》时期的陪护。我记得当时有至少三次跳跃没有通过，整个人很沮丧。Craig跟我说，"你已经很棒了，现在这个基地里只有你一个中国人，你还活着就已经比其他人强了。"这倒也不是什么人生哲理，但是他乐观的处事态度比较让我触动。后来我在和他交流时，偶然得知他的太太得了癌症，要准备再去做个检测。当时夫妇俩正计划去夏威夷旅游，Craig说不管医院给的反馈是好是坏，他们都要去夏威夷。半年之后，我因为要训练又从国内来到基地。Craig很平静地告诉我，太太已经去世了，他的岳父也走了。他说，"小伙子，人生还要继续，没有办法，我们还要跳伞"。这句话带给我的震撼有点像基努·里维斯在Stephen Colbert的节目里提到的"人在去世后会知道那些曾经爱过我们的人，还会思念着我们"。我觉得跳伞带给我的，是通过这些各色的小故事，让很多新鲜的知识和感悟充斥我的人生。</p>
+      <p><strong>《WSJ.》：</strong>对于那些想尝试跳伞的朋友，你的建议是？<br><strong>常艺 ：</strong>我觉得大胆去尝试，不要考虑，我要做的事立马会去做，我要见这个人，就会去见这个人。</p>
+      <p><strong>《WSJ.》：</strong>你对未来的规划是？<br><strong>常艺 ：</strong>希望有机会到大学讲课，说说小众运动，这只是我的一个设想。</p>
+      <hr>
+      <h3>English Version</h3>
+      <p><strong>Chang Yi: Learning to Skydive Is Learning to Be Friends with Fear</strong></p>
+      <p>Search for "skydiving" on Xiaohongshu, and you will find nearly 30 drop zones across China, from Beijing to Hainan. A single jump typically costs between 2,000 and 5,000 RMB, with varying levels of service.</p>
+      <p>Strictly speaking, skydiving is not a new extreme sport. As far back as the Middle Ages, Moors living in Córdoba, Spain attempted an unsuccessful high-altitude leap using a modified oversized cloak. A manuscript in the British Library shows that the most primitive parachute design was completed during the Renaissance.</p>
+      <p>Since the 20th century, skydiving has been widely used in the military. From the 1950s it gradually became an international competitive sport, with the first World Parachuting Championships held in Yugoslavia in 1951. China introduced skydiving early — civilian organisations can be traced back to the 1940s, and the Skydiving Committee of the Aero Sports Federation of China was established in the 1960s.</p>
+      <p>As times have changed, skydiving has taken on new meaning, drawing in more and more ordinary people who want to challenge themselves. Chang Yi is one of them.</p>
+      <h3>#1</h3>
+      <p>Chang Yi, an extreme sports content creator, first tried skydiving in 2016. He was studying for a master's degree in marketing at Nanyang Technological University in Singapore when he came to Stanford as an exchange student. By then, the outdoor-sports enthusiast had already acquired skills in rock climbing, diving, and surfing. In his mind at the time, skydiving did not really exist as a "sport" — his motivation for trying it was partly youthful boldness and partly a desire to find the upper limit of his own fear.</p>
+      <p>"I have a fear of heights. Looking down from the tenth or eleventh floor makes my legs go weak. But I wanted to see whether I could come to terms with that."</p>
+      <p>Skydive Perris in Southern California is an Air Force training base with world-class facilities. Chang headed straight there with his luggage. After six hours of ground training, the moment arrived for his first jump. Some enthusiasts absolutely revel in the sensation of soaring freely at altitude, but Chang admits that when the plane climbed to 4,000 metres and he stepped out of the cabin, he was frightened. "I had to admit I felt very small. On that first jump I wasn't thinking at all — I was completely out of it, my mind totally blank."</p>
+      <p>Because he failed to respond to his instructor's commands in time, the first jump was deemed a failure. Beyond the mild disappointment, it left him with a severe gastrointestinal reaction. Back on the ground, he rested for half an hour, repeatedly giving himself mental encouragement. His instructor told him he could wait until the next day. He didn't want to wait. After a short break he boarded the plane again. "I didn't want Americans thinking, 'Is that what Chinese people are like?' I had a sense of national pride — that was my honest feeling at the time."</p>
+      <p>A skydiver carries two parachutes: if the main canopy fails, there is a reserve. And if the reserve also fails, an automatic activation device (AAD) will trigger deployment at a set altitude to ensure a safe landing. Chang understood he was absolutely safe. He tried to regulate his breathing and calm himself down. The second jump went relatively smoothly, and after those two jumps he decided to "try again the next day." The beginner course at the drop zone requires eight jumps to earn an AFF (Accelerated Freefall) certificate. From the ninth jump onward, the instructions given in the air become increasingly complex and the difficulty level rises step by step; only those who complete 25 jumps earn the USPA-recognised A-licence. "On every jump the instructor adds a new move — checking your altimeter, doing a turn, exiting without assistance lying flat, or doing a turn combined with an ascent..."</p>
+      <p>Chang eventually passed. From his first jump at Skydive Perris in 2016 to today — seven years — he has made nearly 230 jumps in locations around the world. In our conversation, he said that even though he now feels completely at ease, every time he leaps from the cabin he is still afraid; that instinctive reaction is written into his DNA. For any person, the fear in the blood and a heart that dares to push limits can coexist — even a brave person is allowed moments of timidity. So Chang chose to make friends with fear.</p>
+      <p>"Fear is everywhere. There is no way to overcome it; you can only face it. The next time I skydive, I will still be afraid — but I can accept that."</p>
+      <h3>#2</h3>
+      <p>Just a few days before we spoke, Chang had gone through a brush with danger. While filming on Niubei Mountain in western Sichuan, he developed a sudden cold, and his body began to swell under the effects of altitude sickness. The situation became critical, but an ambulance arrived in time. "I was scared at that moment, but I also knew I was going to be OK," he said.</p>
+      <p>Adventure and coexisting with fear seem to have become a beautiful kind of temptation, one that gave Chang new thoughts about the future after he entered the workforce.</p>
+      <p>After returning from abroad, Chang became an office worker with a nine-to-five routine. Rather than going back to his hometown in Shandong and entering a state institution, he chose to put down roots in Hangzhou. In his view, compared with Beijing, Shanghai, or Shenzhen, the pace of life in Hangzhou is relatively unhurried. As a teenager, he had read the famous line about West Lake — "comparing her to Xi Shi, light or heavy make-up both suit her well" — and had been full of curiosity about its landscape. Hangzhou largely fulfilled his vision of a good life: enough time to cook, drink tea, and take walks, and just half an hour on the metro to reach outdoor climbing spots.</p>
+      <p>But in the end, the office couldn't hold him.</p>
+      <p>Years of outdoor adventure had shaped a decisive, capable way of dealing with things. In 2018, Chang quit his job and resolutely joined the ranks of entrepreneurs. "From childhood we live along a life trajectory designed by others. A lot of people just 'wait.' I didn't want that. If I didn't go out and start a business at 20, I'd never be able to do it at 30."</p>
+      <p>Shuttling between China and the United States, Chang got to know a group of extreme sports enthusiasts, including top surfers and retired Olympic athletes. He brought them together, built an MCN-style platform, and used the resources he already had to connect them with outdoor filming opportunities. Entrepreneurship brings both opportunity and risk, and Chang naturally hit walls. At one point he experimented with an outdoor sports-tourism model, but after going around in circles he decided to focus first on nurturing his personal brand.</p>
+      <p>In recent years, as the influencer economy in China has continued to grow, extreme-sports KOLs like Chang have each carved out their own niche. His fans are captivated by the extraordinary richness of his life experiences, and he has attracted attention from various brands. As his profile has grown, he now even gets the chance to appear on variety programmes to promote skydiving to a wider audience.</p>
+      <p>"Sports artist" is how Chang defines himself. Body and soul must stay on the road, he says. He seizes every opportunity to read — lately he has been absorbed in a book on Song-dynasty ci poetry, moved by the life stories of exiled writers and wandering intellectuals. At the same time, in preparation for an upcoming triathlon, he maintains a high-intensity training schedule.</p>
+      <p>"My twenties have already been pretty brilliant. I hope to find a new balance before I turn 35," he said.</p>
+      <hr>
+      <p><strong>The following is WSJ.'s conversation with Chang Yi:</strong></p>
+      <p><strong>WSJ.:</strong> When did the skydiving craze take off in China?<br>
+      <strong>Chang Yi:</strong> I was one of the earlier people in China to get into skydiving. As I recall, around 2017 a wave appeared of people going to the U.S. or Dubai to learn.</p>
+      <p><strong>WSJ.:</strong> What skydiving communities exist in China?<br>
+      <strong>Chang Yi:</strong> I know there are quite a few in Hainan, and others scattered around Jiangsu, Zhejiang, Beijing, and Guangdong. These bases are very professional — they have USPA certification.</p>
+      <p><strong>WSJ.:</strong> You first learned to skydive in the United States. From what you observed, what do American skydivers tend to do for a living?<br>
+      <strong>Chang Yi:</strong> In the area around Lakeside, California, a community has formed that's a bit like an aviation village — nine out of ten people there can skydive, and the tenth can fly a plane. Chefs skydive, cleaning staff skydive. Local residents come too: university students, architects, nine-to-five office workers, all sorts. People come on weekends to jump, eat, and drink — skydiving is like a community culture there, the way table tennis is for us.</p>
+      <p><strong>WSJ.:</strong> What insights has skydiving given you?<br>
+      <strong>Chang Yi:</strong> The life lessons I picked up before came mostly from my family upbringing. In middle and high school I absorbed knowledge from textbooks, but I don't think of that as real personal wisdom. I went abroad at 17 without my parents around, and from that point on my understanding of things came largely from what I gained through extreme sports. Without skydiving, I might view the world through a completely different framework. Having seen so much of this world, I think of that line: water benefits all things without striving — it makes you approach people and situations with more equanimity.</p>
+      <p><strong>WSJ.:</strong> With over 200 jumps to your name, was there a person or moment that particularly moved you?<br>
+      <strong>Chang Yi:</strong> Yes. At the drop zone I met an instructor named Craig. He had served as a jump instructor for the Canadian police and the U.S. Navy SEALs, and was Tom Cruise's safety escort during the filming of Mission: Impossible — Fallout. I remember failing at least three jumps and feeling completely disheartened. Craig told me, "You're already doing great. Right now you're the only Chinese person at this base, and the fact that you're still alive already puts you ahead of the others." It wasn't exactly a life philosophy, but his optimistic outlook touched me. Later, chatting with him, I happened to learn that his wife had cancer and they were waiting on another test result. He and his wife were planning a trip to Hawaii, and Craig said that whatever the hospital's answer was — good or bad — they were going to Hawaii. Half a year later, I came back to the base from China for more training. Craig told me very calmly that his wife had passed away, and that his father-in-law had also gone. He said, "Kid, life goes on. There's nothing to do — we still have to skydive." The impact of those words reminded me of something Keanu Reeves said on Stephen Colbert's show — that after we're gone, the people who loved us will still be thinking of us. What skydiving has given me is this: through all these small, colourful stories, fresh knowledge and insight keep filling my life.</p>
+      <p><strong>WSJ.:</strong> What is your advice for friends who want to try skydiving?<br>
+      <strong>Chang Yi:</strong> Go for it boldly — don't overthink it. Things I decide I want to do, I do right away. People I decide I want to meet, I go and meet them.</p>
+      <p><strong>WSJ.:</strong> What are your plans for the future?<br>
+      <strong>Chang Yi:</strong> I hope to have the chance to lecture at universities and talk about niche sports. That's just an idea I have for now.</p>
+    `
+  }
 ];
 
-// Render article cards
+// Render portfolio cards
 function renderArticles() {
   const grid = document.getElementById('articles-grid');
-  grid.innerHTML = articles.map(a => `
+  if (!grid) return;
+  grid.innerHTML = articlesData.map(a => `
     <div class="article-card" onclick="openArticle(${a.id})">
-      <img class="article-card-img" src="${a.img}" alt="${a.title}">
+      <img class="article-card-img" src="images/article${a.id}.jpg" alt="${a.title}" onerror="this.src='https://placehold.co/400x250?text=Article'">
       <div class="article-card-body">
         <div class="article-outlet">${a.outlet}</div>
         <div class="article-title">${a.title}</div>
@@ -176,43 +460,40 @@ function renderArticles() {
     </div>
   `).join('');
 }
-renderArticles();
 
-// Open article detail page
 function openArticle(id) {
-  const a = articles.find(x => x.id === id);
-  document.getElementById('d-outlet').textContent = a.outlet;
-  document.getElementById('d-title').textContent = a.title;
-  document.getElementById('d-img').src = a.img;
-  document.getElementById('d-body').textContent = a.body;
-  document.getElementById('d-link').href = a.link;
+  const article = articlesData.find(a => a.id === id);
+  if (!article) return;
+  document.getElementById('d-outlet').textContent = article.outlet;
+  document.getElementById('d-title').textContent = article.title;
+  document.getElementById('d-rich-content').innerHTML = article.fullHtml;
+  document.getElementById('d-link').href = article.link;
 
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  const detail = document.getElementById('article-detail');
-  detail.style.display = 'block';
-  detail.classList.add('active');
+  const detailDiv = document.getElementById('article-detail');
+  detailDiv.style.display = 'block';
+  detailDiv.classList.add('active');
   window.scrollTo(0, 0);
 }
 
-// Navigate between pages
-function showPage(name) {
-  const detail = document.getElementById('article-detail');
-  detail.style.display = 'none';
-  detail.classList.remove('active');
+function showPage(pageId) {
+  const detailDiv = document.getElementById('article-detail');
+  detailDiv.style.display = 'none';
+  detailDiv.classList.remove('active');
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById(name).classList.add('active');
-  document.querySelectorAll('.nav-links a').forEach(a => {
-    a.classList.toggle('active', a.dataset.page === name);
+  document.getElementById(pageId).classList.add('active');
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    if (link.dataset.page === pageId) link.classList.add('active');
+    else link.classList.remove('active');
   });
   window.scrollTo(0, 0);
 }
 
-// Lightbox
 function openLightbox(src, title, desc) {
+  const lb = document.getElementById('lightbox');
   document.getElementById('lb-img').src = src;
   document.getElementById('lb-title').textContent = title;
   document.getElementById('lb-desc').textContent = desc;
-  const lb = document.getElementById('lightbox');
   lb.classList.add('active');
   document.body.style.overflow = 'hidden';
 }
@@ -222,21 +503,20 @@ function closeLightbox() {
 }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
 
-// Return to landing
 function goHome() {
   document.getElementById('site').classList.remove('visible');
   setTimeout(() => {
     document.getElementById('landing').classList.remove('hidden');
   }, 300);
 }
-
-// Enter site from landing
 function enterSite() {
   document.getElementById('landing').classList.add('hidden');
   setTimeout(() => {
     document.getElementById('site').classList.add('visible');
   }, 400);
 }
+
+renderArticles();
 </script>
 </body>
 </html>

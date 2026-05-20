@@ -66,9 +66,51 @@
     h1.detail-title {
       text-align: center;
     }
+    /* Grammy music button - fixed bottom-left of about page */
+    #music-btn {
+      position: fixed;
+      bottom: 32px;
+      left: 32px;
+      background: rgba(245, 242, 235, 0.92);
+      border: 1px solid #c8c4b8;
+      border-radius: 50%;
+      width: 58px;
+      height: 58px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+      color: #3a3830;
+      transition: all 0.2s ease;
+      z-index: 999;
+      padding: 0;
+      gap: 2px;
+    }
+    #music-btn:hover {
+      background: rgba(235, 230, 220, 0.98);
+      transform: scale(1.08);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.18);
+    }
+    #music-btn.playing {
+      background: rgba(58, 56, 48, 0.9);
+      color: #f5f2eb;
+      border-color: #3a3830;
+    }
+    #music-label {
+      font-family: 'Karla', sans-serif;
+      font-size: 9px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      line-height: 1;
+    }
   </style>
 </head>
 <body>
+
+<!-- BACKGROUND MUSIC -->
+<audio id="bg-music" src="music/The Devil Wears Prada Original Score - 23. Christian & Andrea.mp3" loop></audio>
 
 <!-- LANDING -->
 <div id="landing">
@@ -132,6 +174,47 @@
       </div>
     </div>
 
+
+    <!-- Music Player Button -->
+    <button id="music-btn" onclick="toggleMusic()" title="Play / Pause">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 68" width="34" height="34">
+        <!-- Wide marble base (trapezoid) -->
+        <polygon points="4,68 52,68 46,54 10,54" fill="currentColor" opacity="0.6"/>
+        <!-- Base top edge highlight -->
+        <rect x="10" y="52" width="36" height="3" rx="0.5" fill="currentColor" opacity="0.85"/>
+
+        <!-- Pedestal column -->
+        <rect x="17" y="36" width="22" height="17" rx="1" fill="currentColor"/>
+        <!-- Pedestal top cap (gold rim) -->
+        <rect x="14" y="34" width="28" height="3.5" rx="1" fill="currentColor"/>
+        <!-- Pedestal bottom cap -->
+        <rect x="13" y="52" width="30" height="3" rx="0.5" fill="currentColor"/>
+
+        <!-- Turntable plate on top of pedestal cap -->
+        <ellipse cx="28" cy="34" rx="9" ry="3" fill="currentColor" opacity="0.75"/>
+
+        <!-- S-shaped tone arm: from turntable center curves up then left to horn -->
+        <!-- Arm goes: from ~(28,31) curves right-up to (38,22) then left-up to (20,10) -->
+        <path d="M28,31 C32,24 40,22 38,16 C36,10 24,8 16,5"
+              fill="none" stroke="currentColor" stroke-width="3"
+              stroke-linecap="round" stroke-linejoin="round"/>
+
+        <!-- Horn bell: large flared opening, angled upper-left -->
+        <!-- Horn mouth (big ellipse, rotated) -->
+        <ellipse cx="10" cy="9" rx="10" ry="6"
+                 fill="currentColor" opacity="0.9"
+                 transform="rotate(-35 10 9)"/>
+        <!-- Horn inner opening (slightly lighter) -->
+        <ellipse cx="10" cy="9" rx="7" ry="4"
+                 fill="currentColor" opacity="0.5"
+                 transform="rotate(-35 10 9)"/>
+        <!-- Horn throat (narrow end connecting to arm) -->
+        <ellipse cx="16" cy="5" rx="3" ry="2"
+                 fill="currentColor"
+                 transform="rotate(-35 16 5)"/>
+      </svg>
+      <span id="music-label">Play</span>
+    </button>
     <!-- Lightbox -->
     <div id="lightbox" onclick="closeLightbox()">
       <div class="lb-inner" onclick="event.stopPropagation()">
@@ -492,6 +575,21 @@ function showPage(pageId) {
     if (link.dataset.page === pageId) link.classList.add('active');
     else link.classList.remove('active');
   });
+  // Show music button only on About page
+  const btn = document.getElementById('music-btn');
+  if (pageId === 'about') {
+    btn.style.display = 'flex';
+  } else {
+    btn.style.display = 'none';
+    // Pause music when leaving About
+    const music = document.getElementById('bg-music');
+    if (!music.paused) {
+      music.pause();
+      music.currentTime = 0;
+      btn.classList.remove('playing');
+      document.getElementById('music-label').textContent = 'Play';
+    }
+  }
   window.scrollTo(0, 0);
 }
 
@@ -519,7 +617,23 @@ function enterSite() {
   document.getElementById('landing').classList.add('hidden');
   setTimeout(() => {
     document.getElementById('site').classList.add('visible');
+    document.getElementById('music-btn').style.display = 'flex';
   }, 400);
+}
+
+function toggleMusic() {
+  const music = document.getElementById('bg-music');
+  const btn = document.getElementById('music-btn');
+  const label = document.getElementById('music-label');
+  if (music.paused) {
+    music.play();
+    btn.classList.add('playing');
+    label.textContent = 'Now';
+  } else {
+    music.pause();
+    btn.classList.remove('playing');
+    label.textContent = 'Play';
+  }
 }
 
 renderArticles();

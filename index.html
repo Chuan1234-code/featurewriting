@@ -7,109 +7,40 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Karla:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiIgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIj48cmVjdCB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHJ4PSI2IiBmaWxsPSIjMGEwYTBhIi8+PHJlY3QgeD0iMTIiIHk9IjUiIHdpZHRoPSI4IiBoZWlnaHQ9IjEzIiByeD0iNCIgZmlsbD0iI2Y4ZjdmNCIvPjxwYXRoIGQ9Ik05IDE2IFE5IDIzIDE2IDIzIFEyMyAyMyAyMyAxNiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZjhmN2Y0IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxsaW5lIHgxPSIxNiIgeTE9IjIzIiB4Mj0iMTYiIHkyPSIyNyIgc3Ryb2tlPSIjZjhmN2Y0IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxsaW5lIHgxPSIxMSIgeTE9IjI3IiB4Mj0iMjEiIHkyPSIyNyIgc3Ryb2tlPSIjZjhmN2Y0IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjwvc3ZnPg==">
   <style>
-    /* 临时修复文章内段落间距和图片样式，不破坏原有设计 */
-    #article-detail .detail-rich-content {
-      line-height: 1.7;
-    }
-    #article-detail .detail-rich-content p {
-      margin-bottom: 1.2em;
-    }
-    #article-detail .detail-rich-content h3 {
-      margin: 1.5em 0 0.5em;
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 500;
-    }
-    #article-detail .detail-rich-content img {
-      max-width: 100%;
-      margin: 1.8em 0;
-      display: block;
-      border-radius: 4px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    }
-    #article-detail .detail-rich-content hr {
-      margin: 2.5em 0;
-      border: 0;
-      height: 1px;
-      background: #e0ddd5;
-    }
-    /* article2 images centered */
-    #article-detail .detail-rich-content img.img-center {
-      margin-left: auto;
-      margin-right: auto;
-    }
-    /* remove duplicate arrow from back button */
+    #article-detail .detail-rich-content { line-height: 1.7; }
+    #article-detail .detail-rich-content p { margin-bottom: 1.2em; }
+    #article-detail .detail-rich-content h3 { margin: 1.5em 0 0.5em; font-family: 'Cormorant Garamond', serif; font-weight: 500; }
+    #article-detail .detail-rich-content img { max-width: 100%; margin: 1.8em 0; display: block; border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+    #article-detail .detail-rich-content hr { margin: 2.5em 0; border: 0; height: 1px; background: #e0ddd5; }
+    #article-detail .detail-rich-content img.img-center { margin-left: auto; margin-right: auto; }
     .back-btn::before { content: none; }
-    /* contact page vertical + horizontal centering */
-    #contact.active {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 70vh;
-    }
-    #contact .contact-inner {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      max-width: 480px;
-      width: 100%;
-    }
-    #contact .contact-left {
-      width: 100%;
-      text-align: center;
-    }
-    #contact .contact-links {
-      justify-content: center;
-    }
-    /* article detail title centered */
-    h1.detail-title {
-      text-align: center;
-    }
-    /* Grammy music button - fixed bottom-left of about page */
+    #contact.active { display: flex; align-items: center; justify-content: center; min-height: 70vh; }
+    #contact .contact-inner { display: flex; flex-direction: column; align-items: center; text-align: center; max-width: 480px; width: 100%; }
+    #contact .contact-left { width: 100%; text-align: center; }
+    #contact .contact-links { justify-content: center; }
+    h1.detail-title { text-align: center; }
     #music-btn {
-      position: fixed;
-      bottom: 32px;
-      left: 32px;
-      background: rgba(245, 242, 235, 0.92);
-      border: 1px solid #c8c4b8;
-      border-radius: 50%;
-      width: 58px;
-      height: 58px;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      cursor: pointer;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-      color: #3a3830;
-      transition: all 0.2s ease;
-      z-index: 999;
-      padding: 0;
-      gap: 2px;
+      position: fixed; bottom: 32px; left: 32px;
+      background: rgba(245, 242, 235, 0.92); border: 1px solid #c8c4b8;
+      border-radius: 50%; width: 58px; height: 58px;
+      display: none; align-items: center; justify-content: center;
+      flex-direction: column; cursor: pointer;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12); color: #3a3830;
+      transition: all 0.2s ease; z-index: 999; padding: 0; gap: 2px;
     }
-    #music-btn:hover {
-      background: rgba(235, 230, 220, 0.98);
-      transform: scale(1.08);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.18);
-    }
-    #music-btn.playing {
-      background: rgba(58, 56, 48, 0.9);
-      color: #f5f2eb;
-      border-color: #3a3830;
-    }
-    #music-label {
-      font-family: 'Karla', sans-serif;
-      font-size: 9px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      line-height: 1;
-    }
+    #music-btn:hover { background: rgba(235, 230, 220, 0.98); transform: scale(1.08); box-shadow: 0 6px 20px rgba(0,0,0,0.18); }
+    #music-btn.playing { background: rgba(58, 56, 48, 0.9); color: #f5f2eb; border-color: #3a3830; }
+    #music-label { font-family: 'Karla', sans-serif; font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; line-height: 1; }
+    /* 4-column portfolio grid */
+    .articles-grid { grid-template-columns: repeat(4, 1fr) !important; }
+    @media (max-width: 900px) { .articles-grid { grid-template-columns: repeat(2, 1fr) !important; } }
+    @media (max-width: 500px) { .articles-grid { grid-template-columns: 1fr !important; } }
   </style>
 </head>
 <body>
 
-<!-- BACKGROUND MUSIC -->
 <audio id="bg-music" src="music/The Devil Wears Prada Original Score - 23. Christian & Andrea.mp3" loop></audio>
 
 <!-- LANDING -->
@@ -174,47 +105,23 @@
       </div>
     </div>
 
-
     <!-- Music Player Button -->
     <button id="music-btn" onclick="toggleMusic()" title="Play / Pause">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 68" width="34" height="34">
-        <!-- Wide marble base (trapezoid) -->
         <polygon points="4,68 52,68 46,54 10,54" fill="currentColor" opacity="0.6"/>
-        <!-- Base top edge highlight -->
         <rect x="10" y="52" width="36" height="3" rx="0.5" fill="currentColor" opacity="0.85"/>
-
-        <!-- Pedestal column -->
         <rect x="17" y="36" width="22" height="17" rx="1" fill="currentColor"/>
-        <!-- Pedestal top cap (gold rim) -->
         <rect x="14" y="34" width="28" height="3.5" rx="1" fill="currentColor"/>
-        <!-- Pedestal bottom cap -->
         <rect x="13" y="52" width="30" height="3" rx="0.5" fill="currentColor"/>
-
-        <!-- Turntable plate on top of pedestal cap -->
         <ellipse cx="28" cy="34" rx="9" ry="3" fill="currentColor" opacity="0.75"/>
-
-        <!-- S-shaped tone arm: from turntable center curves up then left to horn -->
-        <!-- Arm goes: from ~(28,31) curves right-up to (38,22) then left-up to (20,10) -->
-        <path d="M28,31 C32,24 40,22 38,16 C36,10 24,8 16,5"
-              fill="none" stroke="currentColor" stroke-width="3"
-              stroke-linecap="round" stroke-linejoin="round"/>
-
-        <!-- Horn bell: large flared opening, angled upper-left -->
-        <!-- Horn mouth (big ellipse, rotated) -->
-        <ellipse cx="10" cy="9" rx="10" ry="6"
-                 fill="currentColor" opacity="0.9"
-                 transform="rotate(-35 10 9)"/>
-        <!-- Horn inner opening (slightly lighter) -->
-        <ellipse cx="10" cy="9" rx="7" ry="4"
-                 fill="currentColor" opacity="0.5"
-                 transform="rotate(-35 10 9)"/>
-        <!-- Horn throat (narrow end connecting to arm) -->
-        <ellipse cx="16" cy="5" rx="3" ry="2"
-                 fill="currentColor"
-                 transform="rotate(-35 16 5)"/>
+        <path d="M28,31 C32,24 40,22 38,16 C36,10 24,8 16,5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <ellipse cx="10" cy="9" rx="10" ry="6" fill="currentColor" opacity="0.9" transform="rotate(-35 10 9)"/>
+        <ellipse cx="10" cy="9" rx="7" ry="4" fill="currentColor" opacity="0.5" transform="rotate(-35 10 9)"/>
+        <ellipse cx="16" cy="5" rx="3" ry="2" fill="currentColor" transform="rotate(-35 16 5)"/>
       </svg>
       <span id="music-label">Play</span>
     </button>
+
     <!-- Lightbox -->
     <div id="lightbox" onclick="closeLightbox()">
       <div class="lb-inner" onclick="event.stopPropagation()">
@@ -271,7 +178,6 @@
 </div>
 
 <script>
-// ========== 文章完整数据（含所有图片和完整文字，段间距已由CSS保证） ==========
 const articlesData = [
   {
     id: 1,
@@ -433,7 +339,6 @@ const articlesData = [
       <p>And so in 2010, the 18-year-old Jeon flew to Seoul, setting off on her journey abroad. She knew no one, spoke no Korean, and struggled enormously in those early days.</p>
       <p>She remembers the first day vividly: "I got to the dorm at around six in the evening. I didn't know how to make food, didn't know what I should or shouldn't do. Smartphones weren't that widespread then either, so life was really inconvenient. When I went out I couldn't read Korean, so on the bus I had to count stops. And then count them again on the way back. When the team supervisor held meetings I really tried to listen, but I couldn't understand a word."</p>
       <p>It was a suffocating, helpless feeling. In those first days abroad she felt profoundly alone. The hardest thing was fighting the sense of rootlessness and drift that pervaded every corner of her life. And beyond that, the world of Korean table tennis had its own competitive pressures. Leaving the Chinese system did not mean Jeon could simply win at will overseas.</p>
-      
       <p>With no way back, she worked hard to adapt to her new life. Though she never quite understood why her teammates would wake up and immediately eat ice cream and potato chips, she tried to embrace Korean culture, sharpening her Korean by watching K-dramas. On the court, her level steadily improved and she earned the appreciation of her club coaches. She later made the Korean national team and, at the 2014 Incheon Asian Games, won a precious mixed doubles bronze medal.</p>
       <h3>#3</h3>
       <p>Jeon arrived in Chengdu in poor form. She had injured her knee during a training camp in Europe and had gone a full month without picking up a racket. She was not in the Korean women's team's original plans, but with almost every other squad member lacking big‑match experience, the head coach sought her out and asked her to play. "How desperate must he have been to say that to me," she joked. Unable to refuse, she agreed. In the group stage, facing Hungary, Jeon lost 1–3 to Ni Xialian, who is nearly 30 years her senior, in what turned out to be her only appearance at the championships. After barely advancing from the group stage, Korea was swept 0–3 by Japan in the next round. "I feel sad that I couldn't contribute my share," she said.</p>
@@ -531,16 +436,35 @@ const articlesData = [
       <p><strong>WSJ.:</strong> What are your plans for the future?<br>
       <strong>Chang Yi:</strong> I hope to have the chance to lecture at universities and talk about niche sports. That's just an idea I have for now.</p>
     `
+  },
+  {
+    id: 4,
+    outlet: "Feature Writing",
+    title: "The Price of Feeling Alive",
+    desc: "HYROX is expensive, exhausting, and offers almost no prize. So why are thousands of Hong Kongers signing up — and posting about it?",
+    link: "#",
+    hideLink: true,
+    fullHtml: `
+      <img src="images/article4.png" alt="HYROX Hong Kong">
+      <p>It was a rainy midday in a gym in Central, Anderson just finished his sandbag lunge practice, he was breathing heavily, sweat trickling down from his forehead to his cheekbones, dripping onto the mat. His training partner Anson, standing nearby, signaled him to continue, Anderson didn't answer but replied with a thumbs-up gesture, hoisting the sandbag back onto his shoulders. In less than a week, Anderson will compete in HYROX at Asia World Expo in Hong Kong, his third competition so far. Earlier this year, he took a flight to Taipei and then Bangkok, finished in the top 15% in both races. Today was his final full training session before the official battle next weekend. In the gym, Anderson and Anson were not the only ones preparing for next week's competition, there were also a few taller and stronger foreigners working out, Anderson quietly kept an eye on his potential competitors' running pace, and when he realized those big guys were slower than him, a faint smug smile appeared on his face.</p>
+      <p>HYROX originated in Germany in 2017 for a niche market and there were only 650 participants in the first edition. Since then, the sport has surged globally, more than 550,000 people have competed. The game was so popular, even catching the attention of Hollywood. Last year, photos of 'The Conjuring' star Patrick Wilson competing sparked heated discussion online. In 2022, Hong Kong hosted its first ever competition, within two years, HYROX landed in Beijing, making its debut in mainland China. The rules of HYROX are very clear: you run 1 kilometer, perform an anaerobic exercise, then run another kilometer, followed by another exercise, and repeat this cycle eight times. Everyone knows how to run, and the eight anaerobic exercises—ski erg, sled push, sled pull, burpees, rowing machine, farmer's carry, weighted sandbag lunges, and wall ball throws, all boil down to pushing, pulling, jumping, and throwing, there are no special techniques required, yet HYROX still puts the participants' cardiovascular endurance to the test. In Hong Kong, a growing number of people are signing up for it, not just for challenge, but also to be seen.</p>
+      <p>Anderson wasn't born an athlete; he was slim and barely worked out. Shortly after graduating from college, he started to run, first 5 km, then 10 km, half-marathon. One day his colleague convinced him to run a marathon, then he tried. "There is a big difference between a full and half marathon, building up from 25 km to 42 km is a long process. Every time when I reached 38 km, I felt like I could not go on anymore." Eventually, he quit marathon and soon embarked on another journey — HYROX.</p>
+      <p>When the 3-hour training session ended, Anderson and Anson headed to a Cha Chaan Teng along with a few other friends. After everyone sat down, Anson pointed to the Crispy Bun with Condensed Milk on the menu and laughed, "We really want to order this, but it's way too high in calories." To them, Char Siu rice is their "cheat meal". Both Anson and Anderson joined a training club called JKM, short for "Just keep moving", club member train regularly each week. Anderson enjoys meeting new club members, and the main reason that drew him to HYROX was its social attributes. "People might not be interested in your work, say, a promotion. But when you post pictures from the competition on Instagram, it is very likely to get a lot of likes." He joked. Crystal, Anderson's friend who also competed in Bangkok, recalled a funny incident that happened while they were competing. "We had an after-party that day. Just before we left, I returned to the apartment we were renting and was surprised to find three strangers there. Later, I found out that one girl had hired three stylists for a photoshoot."</p>
+      <p>"The main driving force behind human progress is showing off. Otherwise, why would everyone work so hard at the gym? Isn't it all for the sake of a great physique?"  One competitor commented on RedNote, a Chinese social network platform.</p>
+      <p>Anson admitted, taking part in HYROX did feel a bit like a popularity contest but "showing off" requires real efforts and it was built on hard work, what he really wants is to test his physical limits through competition. "We are fueled by love," Anson teased, "there is no prize money, no trophy, not even a souvenir when you finish the competition."</p>
+      <p>HYROX is expensive, a solo entry costs HK$1,050, a duo HK$995, a team of four HK$785 and official photos cost an extra HK$210. Not just in Hong Kong, but in mainland China as well, HYROX has been criticized as the stingiest race by many people, there are no commemorative T-shirts or keychains, or other merchandise, all you get is a flimsy finisher's patch.</p>
+      <p>Nevertheless, HYROX is a rare sport that perfectly fits the narrative about friendship, teamwork and victory. As adults, we no longer have final exams or graduation ceremonies. Instead, competitions become our new milestone. To hit that target, you train tirelessly every day and eat healthy. The moment when you sprint to the finishing line, you feel truly alive, and all you want is to do it again.</p>
+      <p>"Come cheer for us next weekend — you will love it." Anson smiled.</p>
+    `
   }
 ];
 
-// Render portfolio cards
 function renderArticles() {
   const grid = document.getElementById('articles-grid');
   if (!grid) return;
   grid.innerHTML = articlesData.map(a => `
     <div class="article-card" onclick="openArticle(${a.id})">
-      <img class="article-card-img" src="images/article${a.id}.jpg" alt="${a.title}" onerror="this.src='https://placehold.co/400x250?text=Article'">
+      <img class="article-card-img" src="images/article${a.id}.jpg" alt="${a.title}" onerror="this.src='images/article${a.id}.png'">
       <div class="article-card-body">
         <div class="article-outlet">${a.outlet}</div>
         <div class="article-title">${a.title}</div>
@@ -557,7 +481,7 @@ function openArticle(id) {
   document.getElementById('d-title').textContent = article.title;
   document.getElementById('d-rich-content').innerHTML = article.fullHtml;
   document.getElementById('d-link').href = article.link;
-
+  document.getElementById('d-link').style.display = article.hideLink ? 'none' : 'inline-block';
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   const detailDiv = document.getElementById('article-detail');
   detailDiv.style.display = 'block';
@@ -575,13 +499,11 @@ function showPage(pageId) {
     if (link.dataset.page === pageId) link.classList.add('active');
     else link.classList.remove('active');
   });
-  // Show music button only on About page
   const btn = document.getElementById('music-btn');
   if (pageId === 'about') {
     btn.style.display = 'flex';
   } else {
     btn.style.display = 'none';
-    // Pause music when leaving About
     const music = document.getElementById('bg-music');
     if (!music.paused) {
       music.pause();
@@ -609,9 +531,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbo
 
 function goHome() {
   document.getElementById('site').classList.remove('visible');
-  setTimeout(() => {
-    document.getElementById('landing').classList.remove('hidden');
-  }, 300);
+  setTimeout(() => { document.getElementById('landing').classList.remove('hidden'); }, 300);
 }
 function enterSite() {
   document.getElementById('landing').classList.add('hidden');

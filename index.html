@@ -474,7 +474,7 @@ function renderArticles() {
   `).join('');
 }
 
-function openArticle(id) {
+function openArticle(id, updateHash = true) {
   const article = articlesData.find(a => a.id === id);
   if (!article) return;
   document.getElementById('d-outlet').textContent = article.outlet;
@@ -487,9 +487,10 @@ function openArticle(id) {
   detailDiv.style.display = 'block';
   detailDiv.classList.add('active');
   window.scrollTo(0, 0);
+  if (updateHash) window.location.hash = 'article-' + id;
 }
 
-function showPage(pageId) {
+function showPage(pageId, updateHash = true) {
   const detailDiv = document.getElementById('article-detail');
   detailDiv.style.display = 'none';
   detailDiv.classList.remove('active');
@@ -513,6 +514,7 @@ function showPage(pageId) {
     }
   }
   window.scrollTo(0, 0);
+  if (updateHash) window.location.hash = pageId;
 }
 
 function openLightbox(src, title, desc) {
@@ -538,6 +540,7 @@ function enterSite() {
   setTimeout(() => {
     document.getElementById('site').classList.add('visible');
     document.getElementById('music-btn').style.display = 'flex';
+    navigateToHash();
   }, 400);
 }
 
@@ -557,6 +560,25 @@ function toggleMusic() {
 }
 
 renderArticles();
+
+// ── HASH ROUTING ──
+function navigateToHash() {
+  const hash = window.location.hash.replace('#', '');
+  if (!hash || hash === 'about') {
+    showPage('about', false);
+  } else if (hash === 'portfolio' || hash === 'contact') {
+    showPage(hash, false);
+  } else if (hash.startsWith('article-')) {
+    const id = parseInt(hash.replace('article-', ''));
+    if (!isNaN(id)) {
+      showPage('portfolio', false);
+      openArticle(id, false);
+    }
+  }
+}
+
+window.addEventListener('hashchange', () => navigateToHash());
+
 </script>
 </body>
 </html>

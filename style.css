@@ -465,3 +465,12 @@ nav {
   .contact-inner { grid-template-columns: 1fr; gap: 2rem; }
   #about, #portfolio, #contact, #article-detail { padding: 5rem 1.5rem 3rem; }
 }
+.img-caption {
+  font-size: 0.72rem;
+  color: #999;
+  text-align: center;
+  margin-top: -1.4em;
+  margin-bottom: 2em;
+  letter-spacing: 0.03em;
+  font-style: italic;
+}

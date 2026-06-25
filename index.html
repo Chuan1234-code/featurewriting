@@ -617,7 +617,11 @@ function showPage(pageId, updateHash = true) {
     else link.classList.remove('active');
   });
   const btn = document.getElementById('music-btn');
-btn.style.display = 'flex'; 
+  if (pageId === 'about' || pageId === 'portfolio' || pageId === 'contact') {
+    btn.style.display = 'flex';
+  } else {
+    btn.style.display = 'none';
+  }
   window.scrollTo(0, 0);
   if (updateHash) window.location.hash = pageId;
 }

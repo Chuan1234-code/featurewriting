@@ -616,18 +616,7 @@ function showPage(pageId, updateHash = true) {
     else link.classList.remove('active');
   });
   const btn = document.getElementById('music-btn');
-  if (pageId === 'about') {
-    btn.style.display = 'flex';
-  } else {
-    btn.style.display = 'none';
-    const music = document.getElementById('bg-music');
-    if (!music.paused) {
-      music.pause();
-      music.currentTime = 0;
-      btn.classList.remove('playing');
-      document.getElementById('music-label').textContent = 'Play';
-    }
-  }
+btn.style.display = 'flex'; 
   window.scrollTo(0, 0);
   if (updateHash) window.location.hash = pageId;
 }

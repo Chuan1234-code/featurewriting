@@ -641,6 +641,7 @@ function closeLightbox() {
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
 
 function goHome() {
+  document.getElementById('music-btn').style.display = 'none';
   document.getElementById('site').classList.remove('visible');
   setTimeout(() => { document.getElementById('landing').classList.remove('hidden'); }, 300);
 }
